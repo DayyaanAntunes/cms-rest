@@ -11,10 +11,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
 
   flyway:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/cms_db
-    user: postgres
-    password: admin
