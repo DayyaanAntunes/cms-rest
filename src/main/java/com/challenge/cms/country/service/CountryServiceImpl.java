@@ -6,6 +6,7 @@ import com.challenge.cms.country.domain.mapper.CountryMapper;
 import com.challenge.cms.country.domain.model.Country;
 import com.challenge.cms.country.persistence.CountryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.data.domain.Sort.unsorted;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class CountryServiceImpl implements CountryService{
 
         Optional<String> orderByFiled = allowedSortBy.stream().filter(item -> item.equalsIgnoreCase(orderBy)).findFirst();
         if (orderByFiled.isPresent()){
-        return Sort.by(sortDirection, orderByFiled.get());
+            return Sort.by(sortDirection, orderByFiled.get());
         } else {
             throw new ResponseException("country.invalid-sort-param", HttpStatus.BAD_REQUEST);
         }
@@ -52,7 +51,11 @@ public class CountryServiceImpl implements CountryService{
     @Override
     public Country create (CountryCommand countryCommand){
         Country country = countryMapper.toCountry(countryCommand);
-        return countryRepository.save(country);
+        try {
+            return countryRepository.save(country);
+        } catch (DataIntegrityViolationException exception){
+            throw new ResponseException("country.already-exists", HttpStatus.CONFLICT);
+        }
     }
 
     @Override
