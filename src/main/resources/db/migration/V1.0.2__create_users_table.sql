@@ -4,7 +4,7 @@ CREATE TABLE users
     name  TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    role  TEXT NOT NULL
+    role  TEXT NOT NULL,
 
-    CONSTRAINT pk_employees PRIMARY KEY (id)
+    CONSTRAINT pk_users PRIMARY KEY (id)
 );
