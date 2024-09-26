@@ -5,4 +5,5 @@ import com.challenge.cms.user.domain.model.User;
 
 public interface UserServiceInterface {
     User save(UserCommand userCommand);
+    User update(UserCommand userCommand);
 }
