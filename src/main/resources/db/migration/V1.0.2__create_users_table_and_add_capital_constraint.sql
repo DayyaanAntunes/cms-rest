@@ -8,3 +8,6 @@ CREATE TABLE users
 
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
+
+ALTER TABLE countries
+    ADD CONSTRAINT unique_capital UNIQUE (capital);
