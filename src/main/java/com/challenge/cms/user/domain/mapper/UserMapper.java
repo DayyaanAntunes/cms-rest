@@ -6,10 +6,13 @@ import com.challenge.cms.user.presentation.UserJson;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     User toUser (UserCommand userCommand);
     UserJson toUserJson (User user);
     void toModel(UserCommand userCommand,@MappingTarget User user);
+    List<UserJson> toListJson (List<User> users);
 }
