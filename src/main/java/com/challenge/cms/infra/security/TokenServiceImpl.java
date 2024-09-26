@@ -18,11 +18,24 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(User user) {
-        return null;
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.create()
+                    .withIssuer("auth-api")
+                    .withSubject(user.getEmail())
+                    .withExpiresAt(getExpirationDate())
+                    .sign(algorithm);
+        }catch (JWTCreationException exception){
+            throw new ResponseException("internal", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public String validateToken(String token) {
         return null;
+    }
+
+    private Instant getExpirationDate(){
+        return ZonedDateTime.now(ZoneId.of("Africa/Maputo")).plusHours(2).toInstant();
     }
 }
