@@ -41,4 +41,11 @@ public class UserService implements UserDetailsService,UserServiceInterface {
         }
     }
 
+    @Override
+    public User update(Long id, UserCommand userCommand) {
+        User user = findById(id);
+        userMapper.toModel(userCommand, user);
+        return saveOrUpdate(user);
+    }
+
 }
