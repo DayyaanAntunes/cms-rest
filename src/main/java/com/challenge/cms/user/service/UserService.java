@@ -6,12 +6,14 @@ import com.challenge.cms.user.domain.mapper.UserMapper;
 import com.challenge.cms.user.domain.model.User;
 import com.challenge.cms.user.presistence.UserRepository;
 import lombok.AllArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @AllArgsConstructor
@@ -26,13 +28,17 @@ public class UserService implements UserDetailsService,UserServiceInterface {
 
     @Override
     public User save(UserCommand userCommand) {
-        if (userRepository.existsByEmail(userCommand.email())) throw new ResponseException("user.email-already-exists", HttpStatus.CONFLICT);
-        try {
-            User user = userMapper.toUser(userCommand);
-            user.setPassword(new BCryptPasswordEncoder().encode(userCommand.password()));
+        User user = userMapper.toUser(userCommand);
+        user.setPassword(new BCryptPasswordEncoder().encode(userCommand.password()));
+        return saveOrUpdate(user);
+    }
+
+    private User saveOrUpdate(User user) {
+        try{
             return userRepository.save(user);
-        } catch (Exception e) {
-            throw new ResponseException("internal",HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (ConstraintViolationException e){
+                throw new ResponseException("user.email-already-exists",HttpStatus.CONFLICT);
         }
     }
+
 }
