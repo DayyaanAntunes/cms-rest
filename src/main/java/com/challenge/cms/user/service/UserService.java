@@ -64,4 +64,10 @@ public class UserService implements UserDetailsService,UserServiceInterface {
         return userRepository.findAll();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        if(userRepository.existsById(id)) userRepository.deleteById(id);
+        throw new ResponseException("user.not-found", HttpStatus.NOT_FOUND);
+    }
+
 }
