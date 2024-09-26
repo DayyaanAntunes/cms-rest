@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserServiceInterface {
     User save(UserCommand userCommand);
-    User update(UserCommand userCommand);
+    User update(Long id, UserCommand userCommand);
     User findById(Long id);
     List<User> findAll();
     void deleteById(Long id);
