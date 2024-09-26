@@ -50,6 +50,7 @@ public class CountryServiceImpl implements CountryService{
 
     @Override
     public Country create (CountryCommand countryCommand){
+        if (countryRepository.existsByCapital(countryCommand.capital())) throw new ResponseException("country.capital-already-exists", HttpStatus.CONFLICT);
         Country country = countryMapper.toCountry(countryCommand);
         try {
             return countryRepository.save(country);
@@ -60,6 +61,7 @@ public class CountryServiceImpl implements CountryService{
 
     @Override
     public Country update(Long id, CountryCommand countryCommand) {
+        if (countryRepository.existsByCapital(countryCommand.capital())) throw new ResponseException("country.capital-already-exists", HttpStatus.CONFLICT);
         Country country = findById(id);
         countryMapper.updateCountry(countryCommand, country);
         return countryRepository.save(country);
