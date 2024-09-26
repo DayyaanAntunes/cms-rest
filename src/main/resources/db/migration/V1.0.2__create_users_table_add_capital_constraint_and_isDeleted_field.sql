@@ -10,4 +10,9 @@ CREATE TABLE users
 );
 
 ALTER TABLE countries
-    ADD CONSTRAINT unique_capital UNIQUE (capital);
+    ADD CONSTRAINT unique_capital UNIQUE (capital),
+    ADD COLUMN is_deleted boolean DEFAULT false;
+
+ALTER TABLE users
+    ADD COLUMN is_deleted boolean DEFAULT false;
+
