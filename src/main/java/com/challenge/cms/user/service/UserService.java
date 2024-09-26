@@ -48,4 +48,13 @@ public class UserService implements UserDetailsService,UserServiceInterface {
         return saveOrUpdate(user);
     }
 
+    @Override
+    public User findById(Long id) {
+        try {
+            return userRepository.findUserById(id);
+        }catch (Exception e) {
+            throw new ResponseException("user.not-found", HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
