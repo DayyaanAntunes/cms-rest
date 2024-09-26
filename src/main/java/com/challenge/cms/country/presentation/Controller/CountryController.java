@@ -3,6 +3,7 @@ package com.challenge.cms.country.presentation.Controller;
 import com.challenge.cms.country.domain.command.CountryCommand;
 import com.challenge.cms.country.domain.mapper.CountryMapper;
 import com.challenge.cms.country.presentation.Json.CountryJson;
+import com.challenge.cms.country.presentation.Json.CountryJsonLimited;
 import com.challenge.cms.country.service.CountryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,13 @@ public class CountryController {
     private final CountryService countryService;
 
     @GetMapping
-    public ResponseEntity<List<CountryJson>> getAllCountries(@RequestParam(required = false) String sortBy,
-                                                             @RequestParam(defaultValue = "ASC") String direction) {
+    public ResponseEntity<List<CountryJson>> getAllCountries(@RequestParam(required = false) String sortBy, @RequestParam(defaultValue = "ASC") String direction) {
         return ResponseEntity.ok(countryMapper.toJson(countryService.findAll(sortBy, direction)));
+    }
+
+    @GetMapping("/limited")
+    public ResponseEntity<List<CountryJsonLimited>> getAllCountriesLimitedView(@RequestParam(required = false) String sortBy, @RequestParam(defaultValue = "ASC") String direction) {
+        return ResponseEntity.ok(countryMapper.toJsonLimited(countryService.findAll(sortBy, direction)));
     }
 
     @GetMapping("/{id}")
