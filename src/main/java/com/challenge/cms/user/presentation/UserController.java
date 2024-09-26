@@ -3,13 +3,13 @@ package com.challenge.cms.user.presentation;
 import com.challenge.cms.user.domain.command.UserCommand;
 import com.challenge.cms.user.domain.mapper.UserMapper;
 import com.challenge.cms.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,4 +23,26 @@ public class UserController {
     public ResponseEntity<UserJson> createUser(@RequestBody UserCommand userCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserJson(userService.save(userCommand)));
     }
+
+    @GetMapping
+    public ResponseEntity<List<UserJson>> fetchAllUsers() {
+        return ResponseEntity.ok(userMapper.toListJson(userService.findAll()));
+    }
+
+    @GetMapping({"/{id}"})
+    public ResponseEntity<UserJson> fetchUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userMapper.toUserJson(userService.findById(id)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserJson> updateUser(@PathVariable Long id, @Valid @RequestBody UserCommand userCommand) {
+        return ResponseEntity.ok(userMapper.toUserJson(userService.update(id,userCommand)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
