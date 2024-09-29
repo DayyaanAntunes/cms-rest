@@ -45,4 +45,14 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/deleted-users")
+    public ResponseEntity<List<UserJson>> fetchDeletedUsers() {
+        return ResponseEntity.ok(userMapper.toListJson(userService.findAllDeletedUsers()));
+    }
+
+    @PatchMapping("/restore-user/{id}")
+    public ResponseEntity<UserJson> restoreUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userMapper.toUserJson(userService.restoreUser(id)));
+    }
+
 }
