@@ -11,4 +11,6 @@ public interface CountryService {
     Country update(Long id, CountryCommand countryCommand);
     Country findById(Long id);
     void delete(Long id);
+    List<Country> findAllDeletedCountries();
+    Country restoreCountry(Long id);
 }

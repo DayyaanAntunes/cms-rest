@@ -78,4 +78,19 @@ public class CountryServiceImpl implements CountryService{
             throw new ResponseException("country.not-found", HttpStatus.NOT_FOUND);
         countryRepository.deleteById(id);
     }
+
+    @Override
+    public List<Country> findAllDeletedCountries() {
+        return countryRepository.findByIsDeleted();
+    }
+
+    @Override
+    public Country restoreCountry(Long id) {
+        Country country = countryRepository.findDeletedById(id);
+        if (country.isDeleted()) {
+            country.setDeleted(false);
+            return countryRepository.save(country);
+        }
+        throw new ResponseException("country.not-deleted", HttpStatus.BAD_REQUEST);
+    }
 }
