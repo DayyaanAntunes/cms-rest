@@ -52,11 +52,7 @@ public class UserService implements UserDetailsService,UserServiceInterface {
 
     @Override
     public User findById(Long id) {
-        try {
-            return userRepository.findUserById(id);
-        }catch (Exception e) {
-            throw new ResponseException("user.not-found", HttpStatus.NOT_FOUND);
-        }
+        return userRepository.findById(id).orElseThrow(() -> new ResponseException("user.not-found", HttpStatus.NOT_FOUND));
     }
 
     @Override
