@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UserCommand(
-        @NotBlank String name,
-        @Email String email,
-        @NotBlank String password,
-        @NotNull Role role
+        @NotBlank(message = "{user.name-missing}") String name,
+        @Email(message = "{user.email-invalid}") String email,
+        @NotBlank(message = "{user.password-missing}") String password,
+        @NotNull(message = "{user.role-missing}") Role role
 ) {
 }
