@@ -51,4 +51,14 @@ public class CountryController {
         countryService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/deleted-countries")
+    public ResponseEntity<List<CountryJson>> fetchDeletedUsers() {
+        return ResponseEntity.ok(countryMapper.toJson(countryService.findAllDeletedCountries()));
+    }
+
+    @PatchMapping("/restore-country/{id}")
+    public ResponseEntity<CountryJson> restoreUser(@PathVariable Long id) {
+        return ResponseEntity.ok(countryMapper.toJson(countryService.restoreCountry(id)));
+    }
 }
