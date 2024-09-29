@@ -6,7 +6,7 @@ import com.challenge.cms.user.domain.mapper.UserMapper;
 import com.challenge.cms.user.domain.model.User;
 import com.challenge.cms.user.presistence.UserRepository;
 import lombok.AllArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService,UserServiceInterface {
     private User saveOrUpdate(User user) {
         try{
             return userRepository.save(user);
-        }catch (ConstraintViolationException e){
+        }catch (DataIntegrityViolationException e){
                 throw new ResponseException("user.email-already-exists",HttpStatus.CONFLICT);
         }
     }
@@ -67,5 +67,21 @@ public class UserService implements UserDetailsService,UserServiceInterface {
         else
             throw new ResponseException("user.not-found", HttpStatus.NOT_FOUND);
     }
+
+    @Override
+    public List<User> findAllDeletedUsers() {
+        return userRepository.findByIsDeleted();
+    }
+
+    @Override
+    public User restoreUser(Long id) {
+        User user = userRepository.findDeletedById(id);
+        if (user.isDeleted()) {
+            user.setDeleted(false);
+            return userRepository.save(user);
+        }
+        throw new ResponseException("user.not-deleted", HttpStatus.BAD_REQUEST);
+    }
+
 
 }

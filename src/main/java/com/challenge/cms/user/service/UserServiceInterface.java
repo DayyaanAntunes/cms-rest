@@ -10,4 +10,7 @@ public interface UserServiceInterface {
     User findById(Long id);
     List<User> findAll();
     void deleteById(Long id);
+    List<User> findAllDeletedUsers();
+    User restoreUser(Long id);
+
 }
