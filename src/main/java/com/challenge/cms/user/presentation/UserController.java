@@ -20,7 +20,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<UserJson> createUser(@RequestBody UserCommand userCommand) {
+    public ResponseEntity<UserJson> createUser(@Valid @RequestBody UserCommand userCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserJson(userService.save(userCommand)));
     }
 
